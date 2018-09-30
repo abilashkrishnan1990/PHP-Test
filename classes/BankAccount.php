@@ -24,6 +24,7 @@ class BankAccount implements IfaceBankAccount
         $this->balance = new Money($balance);
     }
     public function transfer(Money $amount, BankAccount $account){
-        //implement this method
+        $this->withdraw($amount);
+        $account->deposit($amount);
     }
 }
