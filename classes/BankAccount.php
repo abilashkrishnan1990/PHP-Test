@@ -8,11 +8,9 @@ class BankAccount implements IfaceBankAccount
     public function __construct(Money $openingBalance){
         $this->balance = $openingBalance;
     }
-
     public function balance(){
         return $this->balance;
     }
-
     public function deposit(Money $amount){
         $amount  = $amount->value();
         $balance = $this->balance->value();
@@ -20,7 +18,10 @@ class BankAccount implements IfaceBankAccount
         $this->balance = new Money($balance);
     }
     public function withdraw(Money $amount){
-        //implement this method
+        $amount  = (string) $amount;
+        $balance = (string) $this->balance;
+        $balance = $balance -  $amount ;
+        $this->balance = new Money($balance);
     }
     public function transfer(Money $amount, BankAccount $account){
         //implement this method
