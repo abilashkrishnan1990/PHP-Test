@@ -1,0 +1,63 @@
+<?php
+defined('BASEPATH') OR exit('No direct script access allowed');
+
+class Read extends CI_Controller {
+	private $table_name = "products";
+	public function __construct() {
+	
+		parent::__construct();
+		$this->inputs();
+		$this->load->database('default');
+
+	}
+	public function index()
+	{
+		//$this->load->view('welcome_message');
+	}
+	public function read(){
+		$sql = "SELECT
+	                    c.name as category_name, p.id, p.name, p.description, p.price, p.category_id, p.created
+	                FROM
+	                    " . $this->table_name . " p
+	                    LEFT JOIN
+	                        categories c
+	                            ON p.category_id = c.id
+	                ORDER BY
+	                    p.created DESC";
+	    $stmt = $this->db->query($sql);
+	    $result['records'] = $stmt->result_array();
+	    print_r(json_encode($result));
+    }
+    public function create(){
+    	$data = json_decode(file_get_contents("php://input"));
+    	print_r($data);
+    }
+    public function get_request_method(){
+  	  	return $_SERVER['REQUEST_METHOD'];
+  	}
+ 
+   	public function inputs(){
+   	  	switch($this->get_request_method()){
+   	  	  	case "POST":
+   	  	  	  	  	$name = $this->input->post('name');
+   	  	  	  	  	$password =$this->input->post('password');
+   	  	  	  	  	echo "$name";
+   	  	  	  	  	echo "$password";
+    	  	  	   	break;
+    	  	  	case "GET":
+    	  	  		$name = $this->input->get('name');
+    	  	  		echo $name ."GET METHOD" ;
+    	  	  		break;
+    	  	  	case "DELETE":
+    	  	  	  	  $this->_request = $this->cleanInputs($_GET);
+    	  	  	break;
+    	  	  	case "PUT":
+    	  	  	  	  $data = json_decode(file_get_contents("php://input"));
+    	  	  	  	  print_r($data);
+    	  	  	break;
+    	  	  	default:
+    	  	  	  	  $this->response('',406);
+   	  	  	 break;
+   	  	 }
+   	} 
+}
